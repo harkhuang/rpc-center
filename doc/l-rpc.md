@@ -1,20 +1,46 @@
-# rpc-center
-实现rpc注册中心,为分布式系统,打造稳定有效的任务调度中心做铺垫
+##6.824 2016 Lecture 2: 基础设施: RPC和多线程   
+
+[原文地址](https://pdos.csail.mit.edu/6.824/notes/l-rpc.txt)
+
+##### 被问的最多的问题？　为什么这么课程选择了Go？
++ 6.824这门课程过去选择使用C++
+
+    过去学生们花费了太多时间修改跟分布式系统无关的bug,比如他们释放了还在使用的对象。
+
++ Go拥有一些特性可以让你更加在集中注意力在分布式系统而不是语言细节
+
+	+ 类型安全
+	+ 垃圾回收（这样就不存在释放后使用的问题了）
+	+ 很好的支持并发
+	+ 很好的支持RPC
 
 
++ 我们喜欢使用Go编程
+
+	一门非常容易学习的语言，可以使用教程[effective_go](https://golang.org/doc/effective_go.html)
+
+###### Remote Procedure Call (RPC)
++ 分布式系统的关键部分，全面的实验都使用RPC.
++ RPC的目的：
+	+ 容易编写网络通信程序
+	+ 隐藏客户端服务器通信的细节
+	+ 客户端调用更加像传统的过程调用
+	+ 服务端处理更加像传统的过程调用
++ RPC被广泛的使用！
 
 
-## 基础设施: RPC和多线程   
- 
+###### RPC理想上想把网络通信做的跟函数调用一样
++ Client:
 
+  	  z = fn(x, y)
 
-### rpc注册中心实现
++ Server:
 
-server
-1. 完成注册rpc函数
-2. 注册中心包含的内容
-
-
+	   fn(x, y) {
+      		compute
+      		return z
+    	}
+	RPC设计目标是这种水平的透明度。
 
 ###### Go example:
 + [https://golang.org/pkg/net/rpc/](https://golang.org/pkg/net/rpc/)
@@ -26,9 +52,10 @@ server
        		<---response
 
 ###### 软件架构
-	client app           handlers
-    	stubs (本地库)           dispatcher ()
-   	RPC lib              RPC lib
+
+	client app         handlers
+    	stubs           dispatcher
+   	RPC lib           RPC lib
      　　net  ------------ net
 
 ###### 一些细节：
